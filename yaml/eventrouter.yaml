@@ -44,7 +44,11 @@ apiVersion: v1
 data:
   config.json: |- 
     {
-      "sink": "glog"
+      "sink": "kafka",
+      "kafkaBrokers": "bootstrap.kafka:9092",
+      "kafkaTopic": "ops.kube-events.stream.json",
+      "kafkaAsync": false,
+      "kafkaRetryMax": 5
     }
 kind: ConfigMap
 metadata:
@@ -71,7 +75,7 @@ spec:
     spec:
       containers:
         - name: kube-eventrouter
-          image: gcr.io/heptio-images/eventrouter:latest
+          image: gcr.io/heptio-images/eventrouter@sha256:30e36ce7bad4a7c539e0a0cb1833d309089919fb0ef0c165ee28aabe97740d02
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: config-volume
